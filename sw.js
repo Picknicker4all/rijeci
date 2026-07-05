@@ -1,6 +1,6 @@
 /* Riječi – Service Worker
    Bei Änderungen an App-Dateien (nicht Vokabeln) CACHE-Version hochzählen. */
-const CACHE = 'rijeci-v2';
+const CACHE = 'rijeci-v3';
 
 const SHELL = [
   './',

@@ -6,7 +6,7 @@
    ========================================================== */
 'use strict';
 
-const APP_VERSION = '1.1.0';
+const APP_VERSION = '1.2.0';
 
 /* ---------- Hilfsfunktionen ---------- */
 
@@ -343,8 +343,14 @@ function nextLearnCard() {
   const w = WORDS.get(learn.current.id);
   const dir = learn.current.dir;
 
+  const c = getCard(learn.current.id, dir);
+  let stateTxt = 'Wiederholung';
+  if (c.st === 'new') stateTxt = 'neues Wort';
+  else if (c.st === 'learn') stateTxt = 'Lernschritt ' + (c.step + 1) + ' von ' + LEARN_STEPS.length;
+
   $('#learn-card').hidden = false;
-  $('#card-dir').textContent = dir === 'hd' ? 'Kroatisch → Deutsch' : 'Deutsch → Kroatisch';
+  $('#card-dir').textContent =
+    (dir === 'hd' ? 'Kroatisch → Deutsch' : 'Deutsch → Kroatisch') + ' · ' + stateTxt;
   const front = $('#card-front-word');
   front.textContent = dir === 'hd' ? w.hr : w.de;
   front.className = 'headword' + (dir === 'dh' ? ' de' : '');
@@ -389,17 +395,14 @@ function gradeCard(grade) {
   if (wasNew) logToday('nw');
   saveProgress();
 
+  // Jede Antwort füllt ein Kästchen; wird die Karte erneut eingereiht
+  // (Lernschritt/Nochmal), wächst die Leiste sichtbar um ein Kästchen.
+  learn.done++;
   if (card.st === 'learn') {
-    // Karte kommt in dieser Session nochmal dran
     const pos = Math.min(learn.queue.length, grade === 0 ? 3 : 6);
     learn.queue.splice(pos, 0, learn.current);
-    if (grade >= 2) { /* Zwischenschritt zählt nicht als erledigt */ }
-  } else {
-    learn.done++;
   }
-  // "Nochmal"/Zwischenschritte verlängern die Session nicht in der Anzeige:
-  // total wächst nur, wenn die Warteschlange größer als geplant wird.
-  learn.total = Math.max(learn.total, learn.done + learn.queue.length);
+  learn.total = learn.done + learn.queue.length;
   nextLearnCard();
 }
 

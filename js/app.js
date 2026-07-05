@@ -6,7 +6,7 @@
    ========================================================== */
 'use strict';
 
-const APP_VERSION = '1.0.0';
+const APP_VERSION = '1.1.0';
 
 /* ---------- Hilfsfunktionen ---------- */
 
@@ -179,13 +179,14 @@ function newIntroducedToday() {
   return l ? l.nw : 0;
 }
 
+/* Pro Wort zählt höchstens eine fällige Karte (Geschwisterkarten werden
+   in der Sitzung ohnehin zurückgestellt). */
 function countDue(now = Date.now()) {
   let due = 0;
   for (const id of WORDS.keys()) {
     for (const dir of activeDirs()) {
-      const k = cardKey(id, dir);
-      const c = PROGRESS.cards[k];
-      if (c && c.st !== 'new' && c.due <= now) due++;
+      const c = PROGRESS.cards[cardKey(id, dir)];
+      if (c && c.st !== 'new' && c.due <= now) { due++; break; }
     }
   }
   return due;
@@ -280,23 +281,41 @@ function renderHome() {
 
 const learn = { queue: [], total: 0, done: 0, current: null, revealed: false, active: false };
 
+/* Sitzungsaufbau mit zwei Regeln gegen „Geschwisterkarten“:
+   1. Pro Wort höchstens eine Richtung pro Sitzung (die fälligere gewinnt,
+      die andere bleibt fällig und kommt in der nächsten Sitzung dran).
+   2. Neue Wörter starten nur Kroatisch→Deutsch (Erkennen); die Richtung
+      Deutsch→Kroatisch (Produzieren) wird erst eingeführt, wenn die erste
+      Karte graduiert ist – also nach einigen Tagen erfolgreicher Wiederholung. */
 function collectSession() {
   const now = Date.now();
   const dirs = activeDirs();
-  const dueCards = [], newCards = [];
+  const dueByWord = new Map();
+  const newCands = [];
 
   for (const l of LESSONS) {
     for (const w of l.words) {
       for (const dir of dirs) {
         const c = getCard(w.id, dir);
-        if (c.st !== 'new' && c.due <= now) dueCards.push({ id: w.id, dir });
-        else if (c.st === 'new') newCards.push({ id: w.id, dir });
+        if (c.st !== 'new' && c.due <= now) {
+          const prev = dueByWord.get(w.id);
+          if (!prev || getCard(w.id, prev).due > c.due) dueByWord.set(w.id, dir);
+        }
+      }
+      if (!dueByWord.has(w.id)) {
+        const hd = dirs.includes('hd') ? getCard(w.id, 'hd') : null;
+        const dh = dirs.includes('dh') ? getCard(w.id, 'dh') : null;
+        if (hd && hd.st === 'new') newCands.push({ id: w.id, dir: 'hd' });
+        else if (dh && dh.st === 'new' && (!hd || hd.st === 'rev')) {
+          newCands.push({ id: w.id, dir: 'dh' });
+        }
       }
     }
   }
+  const dueCards = Array.from(dueByWord, ([id, dir]) => ({ id, dir }));
   shuffle(dueCards);
   const newLimit = Math.max(0, SETTINGS.newPerDay - newIntroducedToday());
-  return dueCards.concat(newCards.slice(0, newLimit));
+  return dueCards.concat(newCands.slice(0, newLimit));
 }
 
 function startLearnSession() {

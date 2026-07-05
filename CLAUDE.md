@@ -48,6 +48,19 @@ Wichtig: Wort-IDs sind Schlüssel für den Lernstand auf den Geräten des
 Nutzers – bestehende IDs niemals ändern oder löschen, nur Tippfehler in
 `hr`/`de`/`note`/`sentences` korrigieren.
 
+Die Reihenfolge der Lektionen im Array ist die **Lernreihenfolge**
+(chronologisch nach Kursdatum). Die Lektionsnummer im `name` folgt der
+Array-Position, die `id`/Wort-IDs bleiben davon unabhängig und stabil.
+Neue Lektionen: nächste freie `id` (l10, l11 …) vergeben und an der
+chronologisch richtigen Stelle einsortieren, Namen neu durchnummerieren.
+
+Kursvarianten: Standardkroatisch ist die Hauptform (`hr`), serbische/
+bosnische Varianten aus dem Kurs als Notiz (z.B. nogomet/fudbal).
+
+SRS-Regeln in app.js: Neue Wörter starten nur HR→DE; DE→HR wird erst
+eingeführt, wenn die HR→DE-Karte graduiert ist. Pro Wort erscheint
+höchstens eine Richtung pro Sitzung (Geschwisterkarten-Schutz).
+
 ## Struktur
 
 - `index.html` – alle Views (Start, Lernen, Schreiben, Sätze, Wörter, Einstellungen)

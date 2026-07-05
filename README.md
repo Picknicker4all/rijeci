@@ -2,6 +2,9 @@
 
 Persönlicher Kroatisch-Deutsch-Vokabeltrainer als schlanke Web-App (PWA).
 
+**Live: <https://picknicker4all.github.io/rijeci/>** — am Handy über
+„Zum Startbildschirm hinzufügen" installieren, läuft danach auch offline.
+
 - **Lernen**: Karteikarten mit Spaced Repetition (Wiederholung im richtigen Moment), beide Richtungen
 - **Schreiben**: Kroatisch tippen mit č ć đ š ž-Tastenleiste
 - **Sätze**: Lückentext-Übungen mit den gelernten Wörtern

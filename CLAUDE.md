@@ -76,3 +76,32 @@ höchstens eine Richtung pro Sitzung (Geschwisterkarten-Schutz).
 python3 -m http.server 8765 -d /home/arnealmighty/claude/rijeci
 # dann http://localhost:8765 öffnen; node --check js/app.js für Syntax
 ```
+
+Datenvalidierung nach jedem Import (IDs eindeutig, Lücken korrekt):
+
+```bash
+node -e "
+const w={}; global.window=w; require('./data/vocab.js');
+let n=0, ids=new Set(), errs=[];
+for (const l of w.VOCAB.lessons) for (const word of l.words) {
+  n++; if (ids.has(word.id)) errs.push('doppelt: '+word.id); ids.add(word.id);
+  for (const s of (word.sentences||[])) if ((s.hr.match(/\*/g)||[]).length!==2) errs.push('Lücke: '+word.id);
+}
+console.log(n, 'Wörter ·', errs.length ? errs.join(', ') : 'OK');"
+```
+
+Screenshots: `HOME=<scratchpad> firefox --headless --screenshot out.png
+--window-size=420,900 <url>` – Achtung: Einblend-Animation vorher per
+Style-Override abschalten, sonst wirken Karten leer. Beim Beenden des
+Testservers `pkill`-Muster wählen, das nicht den eigenen Befehl matcht.
+
+## Veröffentlichen
+
+- Live-URL: **https://picknicker4all.github.io/rijeci/**
+- GitHub: `Picknicker4all/rijeci` (öffentlich), Pages von `main`, Pfad `/`
+- `gh` liegt in `~/.local/bin/gh` (ohne sudo installiert), Auth via Keyring
+- Deploy = einfach committen und pushen; danach prüfen:
+  `curl -s https://picknicker4all.github.io/rijeci/data/vocab.js | grep version`
+  (Pages braucht ~30–60 s)
+- Mitlernende nutzen dieselbe URL; Lernstand ist immer lokal pro Gerät.
+- Git-Identität ist repo-lokal konfiguriert (user.email/user.name).

@@ -1,0 +1,542 @@
+/* ==========================================================
+   Riječi – Kroatisch-Deutsch-Trainer
+   Palette „Jadran“: Kalkstein, Adriablau, Šahovnica-Rot
+   ========================================================== */
+
+:root {
+  --paper:  #F6F7F5;
+  --card:   #FFFFFF;
+  --ink:    #1E2733;
+  --stone:  #66717F;
+  --line:   #E1E4E0;
+  --sea:    #1E5A85;
+  --red:    #D8342C;
+  --red-soft: #FBEAE9;
+  --ok:     #2E8F6B;
+  --ok-soft:#E7F3EE;
+  --warn:   #C98A2D;
+  --warn-soft:#FAF1E2;
+  --shadow: 0 1px 3px rgba(30, 39, 51, .08);
+  --serif: Georgia, 'Times New Roman', 'Noto Serif', serif;
+  --sans: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --paper:  #131A22;
+    --card:   #1C2531;
+    --ink:    #E8EAED;
+    --stone:  #93A0AE;
+    --line:   #2A3542;
+    --sea:    #6FA8D6;
+    --red:    #E4544C;
+    --red-soft: #3A2523;
+    --ok:     #57B892;
+    --ok-soft:#1E3229;
+    --warn:   #DCA84F;
+    --warn-soft:#37301F;
+    --shadow: 0 1px 3px rgba(0, 0, 0, .35);
+  }
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+[hidden] { display: none !important; }
+
+html { -webkit-text-size-adjust: 100%; }
+
+body {
+  font-family: var(--sans);
+  background: var(--paper);
+  color: var(--ink);
+  line-height: 1.5;
+  min-height: 100dvh;
+}
+
+/* ---------- Kopfzeile ---------- */
+
+.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: calc(10px + env(safe-area-inset-top)) 18px 10px;
+  max-width: 640px;
+  margin: 0 auto;
+}
+
+.brand { display: flex; align-items: center; gap: 10px; }
+
+.brand-mark { width: 22px; height: 22px; border-radius: 4px; overflow: hidden; }
+.sq-r { fill: var(--red); }
+.sq-w { fill: #fff; }
+@media (prefers-color-scheme: dark) { .sq-w { fill: #E8EAED; } }
+
+.brand-name {
+  font-family: var(--serif);
+  font-size: 1.35rem;
+  font-weight: 700;
+  letter-spacing: .01em;
+}
+
+.iconbtn {
+  background: none;
+  border: none;
+  color: var(--stone);
+  font-size: 1.3rem;
+  padding: 8px;
+  border-radius: 10px;
+  cursor: pointer;
+  line-height: 1;
+}
+.iconbtn:hover { background: var(--line); color: var(--ink); }
+
+/* ---------- Layout ---------- */
+
+main {
+  max-width: 640px;
+  margin: 0 auto;
+  padding: 6px 18px calc(84px + env(safe-area-inset-bottom));
+}
+
+.view[hidden] { display: none; }
+
+.section-title {
+  font-family: var(--serif);
+  font-size: 1.15rem;
+  font-weight: 700;
+  margin: 22px 0 8px;
+}
+
+.hint { color: var(--stone); font-size: .9rem; margin: 4px 0 14px; }
+
+/* ---------- Startseite ---------- */
+
+.greeting {
+  font-family: var(--serif);
+  font-size: clamp(1.9rem, 7vw, 2.5rem);
+  font-weight: 700;
+  margin-top: 18px;
+}
+.greeting-sub { color: var(--stone); margin-bottom: 22px; }
+
+.stat-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  margin-bottom: 22px;
+}
+
+.stat {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  box-shadow: var(--shadow);
+  padding: 12px 8px;
+  text-align: center;
+}
+
+.stat-num {
+  display: block;
+  font-family: var(--serif);
+  font-size: 1.7rem;
+  font-weight: 700;
+}
+.stat:first-child .stat-num { color: var(--red); }
+.stat-label {
+  font-size: .72rem;
+  text-transform: uppercase;
+  letter-spacing: .06em;
+  color: var(--stone);
+}
+
+.home-secondary {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.home-lessons { margin-top: 10px; }
+
+.lesson-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 10px 14px;
+  margin-bottom: 8px;
+}
+.lesson-name { font-size: .95rem; }
+.lesson-meta { color: var(--stone); font-size: .8rem; white-space: nowrap; }
+
+/* ---------- Buttons ---------- */
+
+.bigbtn {
+  display: block;
+  width: 100%;
+  background: var(--red);
+  color: #fff;
+  border: none;
+  border-radius: 14px;
+  font-family: var(--sans);
+  font-size: 1.05rem;
+  font-weight: 600;
+  padding: 15px;
+  cursor: pointer;
+  box-shadow: var(--shadow);
+}
+.bigbtn:active { transform: translateY(1px); }
+
+.midbtn {
+  display: inline-block;
+  width: 100%;
+  background: var(--card);
+  color: var(--ink);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  font-family: var(--sans);
+  font-size: .95rem;
+  font-weight: 600;
+  padding: 12px;
+  cursor: pointer;
+  text-align: center;
+  margin-bottom: 8px;
+}
+.midbtn:hover { border-color: var(--stone); }
+
+.danger .midbtn { color: var(--red); border-color: var(--red-soft); }
+
+/* ---------- Kockice (Schachbrett-Fortschritt) ---------- */
+
+.session-head {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin: 6px 0 18px;
+}
+
+.kockice {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 3px;
+  flex: 1;
+}
+
+.kockice .k {
+  width: 12px;
+  height: 12px;
+  border-radius: 2px;
+  border: 1px solid var(--line);
+  background: transparent;
+  transition: background .25s, border-color .25s;
+}
+.kockice .k.f-r { background: var(--red); border-color: var(--red); }
+.kockice .k.f-w { background: var(--card); border-color: var(--stone); }
+
+.kockice.done { justify-content: center; margin-bottom: 18px; }
+
+.kockice .bar {
+  flex: 1;
+  height: 10px;
+  border-radius: 5px;
+  border: 1px solid var(--line);
+  overflow: hidden;
+  position: relative;
+}
+.kockice .bar > i {
+  position: absolute; inset: 0;
+  width: var(--p, 0%);
+  background: repeating-linear-gradient(90deg,
+    var(--red) 0 10px, var(--card) 10px 20px);
+  transition: width .25s;
+}
+
+/* ---------- Karte (Lernen) ---------- */
+
+.card {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  box-shadow: var(--shadow);
+  padding: 26px 22px;
+  text-align: center;
+}
+
+.card-dir {
+  font-size: .72rem;
+  text-transform: uppercase;
+  letter-spacing: .08em;
+  color: var(--stone);
+  margin-bottom: 18px;
+}
+
+.headword {
+  font-family: var(--serif);
+  font-size: clamp(1.9rem, 8vw, 2.6rem);
+  font-weight: 700;
+  line-height: 1.2;
+  overflow-wrap: break-word;
+}
+.headword.answer { color: var(--sea); }
+.headword.de { font-family: var(--sans); font-weight: 700; }
+
+.pos {
+  font-size: .78rem;
+  text-transform: uppercase;
+  letter-spacing: .06em;
+  color: var(--stone);
+  margin-top: 6px;
+  min-height: 1.2em;
+}
+
+.card-rule {
+  border: none;
+  border-top: 1px solid var(--line);
+  margin: 20px auto;
+  width: 60%;
+}
+
+.card-note { color: var(--stone); font-size: .9rem; margin-top: 8px; }
+
+.card-example {
+  font-size: .95rem;
+  margin-top: 14px;
+  color: var(--ink);
+}
+.card-example em { color: var(--sea); font-style: italic; }
+.card-example .ex-de { display: block; color: var(--stone); font-size: .85rem; }
+
+.card-actions { margin-top: 26px; }
+
+.grade-row {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+}
+
+.gradebtn {
+  border: none;
+  border-radius: 12px;
+  padding: 10px 4px;
+  font-family: var(--sans);
+  font-size: .85rem;
+  font-weight: 600;
+  cursor: pointer;
+  color: #fff;
+}
+.gradebtn span { display: block; font-size: .7rem; font-weight: 400; opacity: .85; margin-top: 2px; }
+.g-again { background: var(--red); }
+.g-hard  { background: var(--warn); }
+.g-good  { background: var(--sea); }
+.g-easy  { background: var(--ok); }
+
+/* ---------- Schreiben ---------- */
+
+input[type="text"], input[type="search"], input[type="number"], select {
+  width: 100%;
+  font-family: var(--sans);
+  font-size: 1rem;
+  color: var(--ink);
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 12px 14px;
+  margin-bottom: 10px;
+}
+input:focus, select:focus, button:focus-visible, summary:focus-visible {
+  outline: 2px solid var(--sea);
+  outline-offset: 1px;
+}
+
+#write-input {
+  margin-top: 20px;
+  text-align: center;
+  font-size: 1.2rem;
+}
+
+.charbar {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin: 4px 0 10px;
+}
+.charbar button {
+  font-family: var(--serif);
+  font-size: 1.15rem;
+  width: 44px;
+  height: 40px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: var(--card);
+  color: var(--sea);
+  cursor: pointer;
+}
+.charbar.small button { width: 38px; height: 34px; font-size: 1rem; }
+
+.write-feedback {
+  border-radius: 12px;
+  padding: 12px;
+  margin-top: 6px;
+  font-size: .95rem;
+}
+.write-feedback.ok   { background: var(--ok-soft);   color: var(--ok); }
+.write-feedback.near { background: var(--warn-soft); color: var(--warn); }
+.write-feedback.bad  { background: var(--red-soft);  color: var(--red); }
+.write-feedback b { font-family: var(--serif); font-size: 1.15rem; }
+
+/* ---------- Sätze ---------- */
+
+.sentence {
+  font-family: var(--serif);
+  font-size: clamp(1.25rem, 5.5vw, 1.6rem);
+  line-height: 1.5;
+}
+.sentence .gap {
+  display: inline-block;
+  min-width: 3.2em;
+  border-bottom: 2px solid var(--red);
+  color: var(--sea);
+  font-weight: 700;
+}
+.sentence-de { color: var(--stone); font-size: .92rem; margin: 12px 0 20px; }
+
+.chips { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; }
+
+.chip {
+  font-family: var(--serif);
+  font-size: 1.05rem;
+  padding: 10px 18px;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  background: var(--card);
+  color: var(--ink);
+  cursor: pointer;
+}
+.chip:hover { border-color: var(--sea); }
+.chip.right { background: var(--ok-soft); border-color: var(--ok); color: var(--ok); }
+.chip.wrong { background: var(--red-soft); border-color: var(--red); color: var(--red); }
+.chip:disabled { cursor: default; opacity: .85; }
+
+/* ---------- Wörter ---------- */
+
+.word-lesson { margin-bottom: 6px; }
+.word-lesson summary {
+  cursor: pointer;
+  font-weight: 600;
+  padding: 10px 4px;
+  list-style-position: inside;
+}
+.word-lesson .lesson-meta { margin-left: 6px; font-weight: 400; }
+
+.wordrow {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  padding: 8px 6px;
+  border-top: 1px solid var(--line);
+  font-size: .95rem;
+}
+.wordrow .dot {
+  flex: none;
+  width: 8px; height: 8px;
+  border-radius: 2px;
+  align-self: center;
+  background: var(--line);
+}
+.wordrow .dot.learn { background: var(--warn); }
+.wordrow .dot.known { background: var(--ok); }
+.wordrow .hr { font-family: var(--serif); font-weight: 700; }
+.wordrow .de { color: var(--stone); margin-left: auto; text-align: right; }
+.wordrow .tag {
+  flex: none;
+  font-size: .62rem;
+  text-transform: uppercase;
+  letter-spacing: .05em;
+  color: var(--sea);
+  border: 1px solid var(--sea);
+  border-radius: 4px;
+  padding: 1px 4px;
+  align-self: center;
+}
+
+.addword { margin-top: 20px; }
+.addword summary { cursor: pointer; font-weight: 600; padding: 10px 0; color: var(--sea); }
+.addword .midbtn { margin-top: 6px; }
+
+/* ---------- Einstellungen ---------- */
+
+.field-label {
+  display: block;
+  font-size: .78rem;
+  text-transform: uppercase;
+  letter-spacing: .06em;
+  color: var(--stone);
+  margin: 16px 0 6px;
+}
+
+.set-group { border: none; margin-top: 10px; }
+.check { display: block; padding: 8px 0; font-size: .95rem; }
+.check input { margin-right: 10px; accent-color: var(--red); }
+
+.filebtn { display: block; }
+
+/* ---------- Leere Zustände ---------- */
+
+.empty { text-align: center; padding: 40px 10px; }
+.empty-big {
+  font-family: var(--serif);
+  font-size: 1.8rem;
+  font-weight: 700;
+  margin-bottom: 10px;
+}
+.empty p { margin-bottom: 18px; color: var(--stone); }
+.empty .midbtn { max-width: 260px; }
+
+/* ---------- Untere Navigation ---------- */
+
+.bottomnav {
+  position: fixed;
+  bottom: 0; left: 0; right: 0;
+  display: flex;
+  justify-content: space-around;
+  background: var(--card);
+  border-top: 1px solid var(--line);
+  padding: 6px 0 calc(6px + env(safe-area-inset-bottom));
+  max-width: 640px;
+  margin: 0 auto;
+}
+@media (min-width: 640px) {
+  .bottomnav { border: 1px solid var(--line); border-radius: 16px 16px 0 0; }
+}
+
+.bottomnav button {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  background: none;
+  border: none;
+  color: var(--stone);
+  font-family: var(--sans);
+  font-size: .68rem;
+  padding: 6px 0;
+  cursor: pointer;
+}
+.bottomnav button.active { color: var(--red); }
+
+/* ---------- Bewegung ---------- */
+
+@media (prefers-reduced-motion: no-preference) {
+  .card { animation: cardin .22s ease-out; }
+  @keyframes cardin {
+    from { opacity: 0; transform: translateY(8px); }
+    to   { opacity: 1; transform: none; }
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  * { transition: none !important; animation: none !important; }
+}
